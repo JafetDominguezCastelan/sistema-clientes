@@ -59,6 +59,24 @@ export default function Home() {
 
       <h1>{mensaje2}</h1>
 
+
+
+      {personas
+        .filter((persona) => persona.edad >= 18)
+        .map((persona) => (
+          <li key={persona.nombre}>
+            {persona.nombre}
+          </li>
+      ))}
+
+      <ul>
+        {personas.map((persona) => (
+          <li key={persona.nombre}>
+            {persona.nombre} - {persona.edad >= 18 ? "Mayor de edad" : "Menor de edad"}
+          </li>
+        ))}
+      
+      </ul>
     </div>
   );
 }
