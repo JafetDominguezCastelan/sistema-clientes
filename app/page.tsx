@@ -1,82 +1,79 @@
+"use client";
+
+import { useState } from "react";
+
+type Cliente = {
+  nombre: string;
+  edad: string;
+};
+
 export default function Home() {
 
-  let nombre = "Jafet";
-  let edad = 21;
-  let mensaje = "";
-  let mensaje2 = "";
+  const [nombre, setNombre] = useState("");
+  const [edad, setEdad] = useState("");
+  const [clientes, setClientes] = useState<Cliente[]>([]);
 
-  if (edad >= 18) {
-    mensaje = "mayor de edad";
-  } else {
-    mensaje = "menor de edad";
+  function agregarCliente() {
+
+    const nuevoCliente: Cliente = {
+      nombre: nombre,
+      edad: edad
+    };
+
+    setClientes([...clientes, nuevoCliente]);
+
+    setNombre("");
+    setEdad("");
   }
 
-  let numeros = [1, 2, 3, 4];
+  function eliminarCliente(index: number) {
 
-  let nombres = ["Juan", "Maria", "Pedro"];
+    const nuevaLista = clientes.filter((_, i) => i !== index);
 
-  let personas = [
-    { nombre: "Juan", edad: 17 },
-    { nombre: "Maria", edad: 22 },
-    { nombre: "Pedro", edad: 15 }
-  ];
-
-  if (personas.length === 1) {
-    mensaje2 = "hay una persona registrada";
-  } else {
-    mensaje2 = "hay " + personas.length + " personas registradas";
+    setClientes(nuevaLista);
   }
 
   return (
     <div>
 
-      <h1>
-        Hola soy {nombre} y tengo {edad} años y soy {mensaje}
-      </h1>
+      <h1>Sistema de Clientes</h1>
 
-      <h2>Números doblados:</h2>
-      <ul>
-        {numeros.map((numero) => (
-          <li key={numero}>{numero * 2}</li>
-        ))}
-      </ul>
+      <input
+        type="text"
+        placeholder="Nombre del cliente"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+      />
 
-      <h2>Nombres:</h2>
-      <ul>
-        {nombres.map((persona) => (
-          <li key={persona}>Hola soy {persona}</li>
-        ))}
-      </ul>
+      <br /><br />
 
-      <h2>Personas:</h2>
+      <input
+        type="number"
+        placeholder="Edad del cliente"
+        value={edad}
+        onChange={(e) => setEdad(e.target.value)}
+      />
+
+      <br /><br />
+
+      <button onClick={agregarCliente}>Agregar cliente</button>
+
+      <h2>Clientes registrados</h2>
+
+      <p>Total de clientes: {clientes.length}</p>
+
       <ul>
-        {personas.map((personasinfo) => (
-          <li key={personasinfo.nombre}>
-            {personasinfo.nombre + " es " + (personasinfo.edad >= 18 ? "mayor de edad" : "menor de edad")}
+        {clientes.map((cliente, index) => (
+          <li key={index}>
+            {cliente.nombre} - {cliente.edad} años
+            {" "}
+            <button onClick={() => eliminarCliente(index)}>
+              Eliminar
+            </button>
           </li>
         ))}
       </ul>
 
-      <h1>{mensaje2}</h1>
-
-
-
-      {personas
-        .filter((persona) => persona.edad >= 18)
-        .map((persona) => (
-          <li key={persona.nombre}>
-            {persona.nombre}
-          </li>
-      ))}
-
-      <ul>
-        {personas.map((persona) => (
-          <li key={persona.nombre}>
-            {persona.nombre} - {persona.edad >= 18 ? "Mayor de edad" : "Menor de edad"}
-          </li>
-        ))}
-      
-      </ul>
     </div>
   );
 }
