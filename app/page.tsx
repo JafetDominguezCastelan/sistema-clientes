@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Cliente = {
   nombre: string;
@@ -13,7 +13,25 @@ export default function Home() {
   const [edad, setEdad] = useState("");
   const [clientes, setClientes] = useState<Cliente[]>([]);
 
+  // 🔹 Cargar clientes al iniciar
+  useEffect(() => {
+    const datos = localStorage.getItem("clientes");
+    if (datos) {
+      setClientes(JSON.parse(datos));
+    }
+  }, []);
+
+  // 🔹 Guardar automáticamente cada vez que cambian
+  useEffect(() => {
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+  }, [clientes]);
+
   function agregarCliente() {
+
+    if (nombre === "" || edad === "") {
+      alert("Llena todos los campos");
+      return;
+    }
 
     const nuevoCliente: Cliente = {
       nombre: nombre,
@@ -27,9 +45,7 @@ export default function Home() {
   }
 
   function eliminarCliente(index: number) {
-
     const nuevaLista = clientes.filter((_, i) => i !== index);
-
     setClientes(nuevaLista);
   }
 
@@ -37,6 +53,8 @@ export default function Home() {
     <div>
 
       <h1>Sistema de Clientes</h1>
+
+      <h2>Agregar cliente</h2>
 
       <input
         type="text"
